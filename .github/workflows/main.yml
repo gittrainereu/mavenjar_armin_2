@@ -1,4 +1,5 @@
-name: Build and Deploy Aya GlassFish Jar
+# SECRET -> SSH_PRIVATE_KEY mit private_key anlegen
+https://github.com/gittrainereu/jm-sein-java/settings/secrets/actions/newname: Build and Deploy Aya GlassFish Jar
 
 on:
   push:
@@ -23,7 +24,11 @@ jobs:
         run: mvn clean package
 
       - name: Copy JAR to Aya-GlassFish via SCP
-        run: |
-          ls -la
-          cd target
-          ls -la 
+        uses: appleboy/scp-action@v1
+        with:
+          host: 164.92.167.148
+          username: tln11
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "target/*.jar"
+          target: "/home/tln1/"
